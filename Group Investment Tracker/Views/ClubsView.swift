@@ -15,6 +15,8 @@ struct ClubsView: View {
             Member(name: "Emily", email: "emily@apple.com")
         ])
     ]
+    @State private var createViewIsPresented: Bool = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -52,11 +54,24 @@ struct ClubsView: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        Image(systemName: "plus.circle")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .padding(20)
+                        Button {
+                            createViewIsPresented.toggle()
+                        } label: {
+                            Image(systemName: "plus.circle")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .padding(20)
+                        }
                     }
+                }
+                if createViewIsPresented {
+                    ZStack {
+                        Color.clear
+                        CreateNewView(itemToCreate: .club, clubs: $clubs.optional(), members: .constant(nil), isPresented: $createViewIsPresented)
+                            .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: 2))
+                            .padding()
+                    }
+                    .background(.ultraThinMaterial)
                 }
             }
         }
@@ -66,3 +81,5 @@ struct ClubsView: View {
 #Preview {
     ClubsView()
 }
+
+

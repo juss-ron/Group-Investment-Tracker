@@ -11,7 +11,8 @@ struct CreateNewView: View {
     var itemToCreate: ItemToCreate
     @State private var name: String = ""
     @State private var email: String = ""
-    @Binding var array: [Any]
+    @Binding var clubs: [Club]?
+    @Binding var members: [Member]?
     @Binding var isPresented: Bool
     
     
@@ -80,11 +81,11 @@ extension CreateNewView {
     
     func createNewItem() {
         guard !name.isEmpty else { return }
-        if array is [Club] {
-            array.append(Club(name: name))
+        if itemToCreate == .club {
+            clubs!.append(Club(name: name))
         } else {
             guard verifyEmail(email) else { return }
-            array.append(Member(name: name, email: email))
+            members!.append(Member(name: name, email: email))
         }
         isPresented.toggle()
     }
@@ -98,5 +99,5 @@ extension CreateNewView {
 }
 
 #Preview {
-    CreateNewView(itemToCreate: .member, array: .constant([]), isPresented: .constant(true))
+    CreateNewView(itemToCreate: .member,clubs: .constant(nil), members: .constant([]), isPresented: .constant(true))
 }
