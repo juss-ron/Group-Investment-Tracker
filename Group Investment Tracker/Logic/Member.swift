@@ -46,5 +46,6 @@ struct Member: Identifiable {
     ///Increases the amount a user owes
     mutating func loan(_ amount: Int) {
         owing += amount
+        interestOwing += amount / 10
     }
 }
