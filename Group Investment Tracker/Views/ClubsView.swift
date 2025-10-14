@@ -17,33 +17,45 @@ struct ClubsView: View {
     ]
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading) {
-                Text("Clubs")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.leading, 20)
-                
-                ScrollView {
-                    ForEach($clubs) { $club in
-                        NavigationLink {
-                            ClubView(club: $club)
-                        } label: {
-                            HStack {
-                                Text(club.name)
-                                    .padding(.horizontal, 15)
-                                    .padding(.vertical, 20)
-                                Spacer()
-                                Text(club.inHand.description)
-                                    .padding(.horizontal, 15)
-                                    .padding(.vertical, 20)
+            ZStack {
+                VStack(alignment: .leading) {
+                    Text("Clubs")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .padding(.leading, 20)
+                    
+                    ScrollView {
+                        ForEach($clubs) { $club in
+                            NavigationLink {
+                                ClubView(club: $club)
+                            } label: {
+                                HStack {
+                                    Text(club.name)
+                                        .padding(.horizontal, 15)
+                                        .padding(.vertical, 20)
+                                    Spacer()
+                                    Text(club.inHand.description)
+                                        .padding(.horizontal, 15)
+                                        .padding(.vertical, 20)
+                                }
+                                .background(.gray.opacity(0.2))
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .padding(.top, 10)
+                                .padding(.horizontal, 20)
                             }
-                            .background(.gray.opacity(0.2))
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .padding(.top, 10)
-                            .padding(.horizontal, 20)
+                            .buttonStyle(.plain)
+                            
                         }
-                        .buttonStyle(.plain)
-                        
+                    }
+                }
+                VStack() {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Image(systemName: "plus.circle")
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .padding(20)
                     }
                 }
             }
