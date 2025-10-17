@@ -13,36 +13,35 @@ struct FirstView: View {
     
     var body: some View {
         NavigationStack() {
-            VStack {
-                Spacer()
-                Spacer()
-                
-                Image("Logo")
-                    .resizable()
-                
-                    .frame(width: 150, height: 175)
-                    .padding(.bottom, 30)
-                
-                Text("Parity")
-                    .font(Font.largeTitle.bold())
-                
-                Spacer()
-                Spacer()
-                Spacer()
-                
-                Circle()
-                    .trim(from: 0.2, to: 0.8)
-                    .stroke(Color.accentColor, lineWidth: 5)
-                    .frame(width: 50, height: 50)
-                    .rotationEffect(Angle(degrees: rotationDegrees))
-                    .onAppear {
-                        withAnimation(.linear(duration: 1).repeatForever(autoreverses: false)) {
-                            rotationDegrees = 360
+            ZStack {
+                Color.background
+                VStack {
+                    Spacer()
+                    Spacer()
+                    
+                    LogoView()
+                    
+                    Text("Parity")
+                        .font(Font.largeTitle.bold())
+                    
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    
+                    Circle()
+                        .trim(from: 0.2, to: 0.8)
+                        .stroke(Color("AccentColor"), lineWidth: 5)
+                        .frame(width: 50, height: 50)
+                        .rotationEffect(Angle(degrees: rotationDegrees))
+                        .onAppear {
+                            withAnimation(.linear(duration: 1).repeatForever(autoreverses: false)) {
+                                rotationDegrees = 360
+                            }
                         }
-                    }
-                
-                Spacer()
-                
+                    
+                    Spacer()
+                    
+                }
             }
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
