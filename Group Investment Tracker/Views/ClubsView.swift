@@ -58,7 +58,7 @@ struct ClubsView: View {
                                 ClubView(club: $club)
                             } label: {
                                 HStack {
-                                    Image("GroupProfileIcon")
+                                    Image("GroupProfilePic")
                                         .resizable()
                                         .frame(width: 50, height: 50)
                                         .clipShape(RoundedRectangle(cornerRadius: 10))
