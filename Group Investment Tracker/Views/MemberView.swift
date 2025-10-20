@@ -169,7 +169,7 @@ struct MemberView: View {
                             .resizable()
                             .frame(width: 50, height: 50)
                             .padding(20)
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.accent)
                     }
                 }
             }
