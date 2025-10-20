@@ -10,76 +10,180 @@ import SwiftUI
 struct ClubView: View {
     @Binding var club: Club
     @State private var createViewIsPresented: Bool = false
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         NavigationStack {
             ZStack {
-                ScrollView {
-                    HStack {
-                        Text("Information")
-                            .padding(.horizontal, 20)
-                            .font(.title2)
-                            .padding(.vertical, 10)
-                        Spacer()
-                    }
-                    .fontWeight(.bold)
-                    HStack {
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("Members")
-                            Text("Total Investment")
-                            Text("Total Interest")
-                            Text("Total Owed")
-                            Text("Amount In-Hand")
-                        }
-                        Spacer()
-                        VStack(alignment: .trailing, spacing: 10) {
-                            Text(club.totalMembers.description)
-                            Text(club.totalInvestment.description)
-                            Text(club.totalInterest.description)
-                            Text(club.totalOwed.description)
-                            Text(club.inHand.description)
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    VStack(alignment: .leading) {
-                        Text("Members")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
-                            ForEach($club.members) { $member in
-                                NavigationLink {
-                                    MemberView(member: $member)
-                                } label: {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 7).foregroundStyle(.gray.opacity(0.2))
-                                        VStack(alignment: .leading) {
-                                            Text(member.name)
-                                                .font(.headline)
-                                                .padding(.bottom, 5)
-                                            HStack {
-                                                Text("Interest")
-                                                Spacer()
-                                                Text(member.interestAccrued.description)
-                                            }
-                                            .font(.callout)
-                                            HStack {
-                                                Text("Owing")
-                                                Spacer()
-                                                Text(member.totalOwing.description)
-                                            }
-                                            .font(.callout)
-                                        }
-                                        .padding(20)
-                                    }
-                                    .frame(height: 100)
-                                    .backgroundStyle(.gray.opacity(0.2))
-                                }
-                                .buttonStyle(.plain)
+                Color.background.ignoresSafeArea(edges: .all)
+                
+                VStack {
+                    HStack(spacing: 10) {
+                        Button {
+                            presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            ZStack {
+                                Image(systemName: "circle.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundStyle(.black)
+                                Image(systemName: "chevron.left.circle.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundStyle(.white)
+                                    .shadow(radius: 2)
                             }
                         }
+                        
+                        Image("GroupProfilePic")
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .clipShape(Circle())
+                            .shadow(radius: 6)
+                            .padding(.leading, 5)
+                        
+                        VStack(alignment: .leading) {
+                            Text(club.name)
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                            Text(club.members.count.description + " Members")
+                                .font(.caption)
+                        }
+                        
+                        Spacer()
+                        
+                        Button {
+                            
+                        } label: {
+                            Image(systemName: "message")
+                                .resizable()
+                                .frame(width: 30, height: 25)
+                        }
                     }
-                    .padding(20)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    
+                    ScrollView {
+                        
+                        VStack {
+                            HStack {
+                                Text("Information")
+                                    .padding(.horizontal, 20)
+                                    .font(.title2)
+                                    .padding(.vertical, 10)
+                                
+                                Spacer()
+                            }
+                            .fontWeight(.bold)
+                            
+                            VStack(spacing: 20) {
+                                HStack(spacing: 20) {
+                                    VStack {
+                                        Text("Investment")
+                                            .padding(.bottom, 2)
+                                        Text(club.totalInvestment.description)
+                                            .font(Font.title2.bold())
+                                    }
+                                    .padding(.vertical, 20)
+                                    .padding(.horizontal, 10)
+                                    .frame(maxWidth: .infinity)
+                                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(.accent, lineWidth: 1))
+                                    VStack {
+                                        Text("Interest")
+                                            .padding(.bottom, 2)
+                                        Text(club.totalInterest.description)
+                                            .font(Font.title2.bold())
+                                    }
+                                    .padding(.vertical, 20)
+                                    .padding(.horizontal, 10)
+                                    .frame(maxWidth: .infinity)
+                                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(.accent, lineWidth: 1))
+                                }
+                                HStack(spacing: 20) {
+                                    VStack {
+                                        Text("Owed")
+                                            .padding(.bottom, 2)
+                                        Text(club.totalOwed.description)
+                                            .font(Font.title2.bold())
+                                    }
+                                    .padding(.vertical, 20)
+                                    .padding(.horizontal, 10)
+                                    .frame(maxWidth: .infinity)
+                                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(.accent, lineWidth: 1))
+                                    VStack {
+                                        Text("In-Hand")
+                                            .padding(.bottom, 2)
+                                        Text(club.inHand.description)
+                                            .font(Font.title2.bold())
+                                    }
+                                    .padding(.vertical, 20)
+                                    .padding(.horizontal, 10)
+                                    .frame(maxWidth: .infinity)
+                                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(.accent, lineWidth: 1))
+                                }
+                            }
+                            .padding(.horizontal, 30)
+                            .padding(.bottom)
+                        }
+                        .background(Color(.systemGray6))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .padding()
+                        
+                        //List of members in the group
+                        VStack {
+                            HStack {
+                                Text("Members")
+                                    .padding(.horizontal, 20)
+                                    .font(.title2)
+                                    .padding(.vertical, 10)
+                                
+                                Spacer()
+                            }
+                            .fontWeight(.bold)
+                            
+                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
+                                ForEach($club.members) { $member in
+                                    NavigationLink {
+                                        MemberView(member: $member)
+                                    } label: {
+                                        VStack(alignment: .leading) {
+                                            Text(member.name)
+                                                .font(Font.title2.bold())
+                                                .padding(.bottom, 5)
+                                            
+                                            VStack {
+                                                HStack {
+                                                    Text("Interest")
+                                                    Spacer()
+                                                    Text(member.interestAccrued.description)
+                                                }
+                                                HStack {
+                                                    Text("Owing")
+                                                    Spacer()
+                                                    Text(member.totalOwing.description)
+                                                }
+                                            }
+                                            .font(.callout)
+                                            .padding(.horizontal, 5)
+                                        }
+                                        .padding(.vertical, 20)
+                                        .padding(.horizontal, 10)
+                                        .frame(maxWidth: .infinity)
+                                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(.accent, lineWidth: 1))
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                            .padding(.horizontal, 30)
+                            .padding(.bottom)
+                        }
+                        .background(Color(.systemGray6))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .padding()
+                    }
                 }
+                
+                //Plus sign for adding more members
                 VStack() {
                     Spacer()
                     HStack {
@@ -91,23 +195,24 @@ struct ClubView: View {
                                 .resizable()
                                 .frame(width: 50, height: 50)
                                 .padding(20)
-                                .foregroundStyle(.black)
+                                .foregroundStyle(.accent)
                         }
                     }
                 }
+                
+                //View that allows you to enter informantion for a new user
                 if createViewIsPresented {
                     ZStack {
                         Color.clear
                         CreateNewView(itemToCreate: .member, clubs: .constant(nil), members: $club.members.optional(), isPresented: $createViewIsPresented)
-                            .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: 2))
+                            .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.accentColor, lineWidth: 2))
                             .padding()
                     }
                     .background(.ultraThinMaterial)
                 }
             }
         }
-        .navigationTitle(club.name)
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarBackButtonHidden(true)
     }
 }
 

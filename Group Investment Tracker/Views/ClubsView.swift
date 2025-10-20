@@ -51,6 +51,8 @@ struct ClubsView: View {
                         }
                         .foregroundStyle(.accent)
                     }
+                    .padding(.bottom)
+                    .background(Color(.systemGray6))
                     
                     ScrollView {
                         ForEach($clubs) { $club in
@@ -94,7 +96,7 @@ struct ClubsView: View {
                         } label: {
                             Image(systemName: "plus.circle")
                                 .resizable()
-                                .frame(width: 60, height: 60)
+                                .frame(width: 50, height: 50)
                                 .padding(20)
                                 .foregroundStyle(.accent)
                         }
