@@ -106,7 +106,7 @@ struct ClubsView: View {
                         Color.clear
                         
                         CreateNewView(itemToCreate: .club, clubs: $clubs.optional(), members: .constant(nil), isPresented: $createViewIsPresented)
-                            .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: 2))
+                            .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.accentColor, lineWidth: 2))
                             .padding()
                     }
                     .background(.ultraThinMaterial)

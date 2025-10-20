@@ -46,18 +46,20 @@ struct CreateNewView: View {
                     cancel()
                 } label: {
                     ZStack {
-                        RoundedRectangle(cornerRadius: 10).foregroundStyle(.gray.opacity(0.2))
+                        RoundedRectangle(cornerRadius: 10).foregroundStyle(.clear)
                         Text("Cancel")
                     }
                 }
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.accentColor, lineWidth: 2))
                 Button {
                     createNewItem()
                 } label: {
                     ZStack {
-                        RoundedRectangle(cornerRadius: 10).foregroundStyle(.gray.opacity(0.2))
+                        RoundedRectangle(cornerRadius: 10).foregroundStyle(.clear)
                         Text("Create")
                     }
                 }
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.accentColor, lineWidth: 2))
             }
             .padding(.horizontal, 20)
             .frame(height: 50)
