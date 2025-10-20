@@ -20,11 +20,39 @@ struct ClubsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                Color.background
+                    .ignoresSafeArea(edges: .all)
                 VStack(alignment: .leading) {
-                    Text("Clubs")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .padding(.leading, 20)
+                    HStack {
+                        Text("Clubs")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .padding(.leading, 20)
+                        
+                        Spacer()
+                        
+                        Group {
+                            Button {
+                                
+                            } label: {
+                                Image(systemName: "message")
+                                    .resizable()
+                                    .frame(width: 30, height: 25)
+                            }
+                            
+                            Button {
+                                
+                            } label: {
+                                Image(systemName: "person")
+                                    .resizable()
+                                    .frame(width: 27, height: 25)
+                                    .padding(.horizontal, 20)
+                            }
+                        }
+                        .foregroundStyle(.accent)
+                    }
+                    .padding(.bottom)
+                    .background(Color(.systemGray6))
                     
                     ScrollView {
                         ForEach($clubs) { $club in
@@ -32,28 +60,37 @@ struct ClubsView: View {
                                 ClubView(club: $club)
                             } label: {
                                 HStack {
+                                    Image("GroupProfilePic")
+                                        .resizable()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                        .shadow(radius: 5)
+                                        .padding()
+                                    
                                     Text(club.name)
-                                        .padding(.horizontal, 15)
-                                        .padding(.vertical, 20)
+                                    
                                     Spacer()
+                                    
                                     Text(club.inHand.description)
-                                        .padding(.horizontal, 15)
-                                        .padding(.vertical, 20)
+                                        .padding()
                                 }
-                                .background(.gray.opacity(0.2))
+                                .background(.white)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(.accent))
                                 .padding(.top, 10)
                                 .padding(.horizontal, 20)
                             }
                             .buttonStyle(.plain)
-                            
                         }
                     }
                 }
+                
                 VStack() {
                     Spacer()
+                    
                     HStack {
                         Spacer()
+                        
                         Button {
                             createViewIsPresented.toggle()
                         } label: {
@@ -61,20 +98,23 @@ struct ClubsView: View {
                                 .resizable()
                                 .frame(width: 50, height: 50)
                                 .padding(20)
-                                .foregroundStyle(.black)
+                                .foregroundStyle(.accent)
                         }
                     }
                 }
+                
                 if createViewIsPresented {
                     ZStack {
                         Color.clear
+                        
                         CreateNewView(itemToCreate: .club, clubs: $clubs.optional(), members: .constant(nil), isPresented: $createViewIsPresented)
-                            .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: 2))
+                            .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.accentColor, lineWidth: 2))
                             .padding()
                     }
                     .background(.ultraThinMaterial)
                 }
             }
+            .navigationBarBackButtonHidden(true)
         }
     }
 }
