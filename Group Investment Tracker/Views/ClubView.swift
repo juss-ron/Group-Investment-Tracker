@@ -64,7 +64,7 @@ struct ClubView: View {
                     .background(Color(.systemGray6))
                     
                     ScrollView {
-                        
+                        //Details about the group
                         VStack {
                             HStack {
                                 Text("Information")
