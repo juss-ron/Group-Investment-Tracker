@@ -13,8 +13,6 @@ struct FirstView: View {
     
     var body: some View {
         NavigationStack() {
-            ZStack {
-                Color.background
                 VStack {
                     Spacer()
                     Spacer()
@@ -42,7 +40,6 @@ struct FirstView: View {
                     Spacer()
                     
                 }
-            }
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                     navigate = true

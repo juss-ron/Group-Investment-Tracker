@@ -23,11 +23,11 @@ struct MemberView: View {
                             Image(systemName: "circle.fill")
                                 .resizable()
                                 .frame(width: 40, height: 40)
-                                .foregroundStyle(.black)
+                                .foregroundStyle(.accent)
                             Image(systemName: "chevron.left.circle.fill")
                                 .resizable()
                                 .frame(width: 40, height: 40)
-                                .foregroundStyle(.white)
+                                .foregroundStyle(Color(.systemGray4))
                                 .shadow(radius: 2)
                         }
                     }
@@ -178,12 +178,13 @@ struct MemberView: View {
                 ZStack {
                     Color.clear
                     TransactionView(isPresented: $createViewIsPresented, member: $member)
-                        .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: 2))
+                        .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.accent, lineWidth: 2))
                         .padding()
                 }
                 .background(.ultraThinMaterial)
             }
         }
+        .navigationBarBackButtonHidden()
     }
 }
 

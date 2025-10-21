@@ -15,7 +15,7 @@ struct ClubView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.background.ignoresSafeArea(edges: .all)
+                //Color.background.ignoresSafeArea(edges: .all)
                 
                 VStack {
                     HStack(spacing: 10) {
@@ -26,11 +26,11 @@ struct ClubView: View {
                                 Image(systemName: "circle.fill")
                                     .resizable()
                                     .frame(width: 40, height: 40)
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(.accent)
                                 Image(systemName: "chevron.left.circle.fill")
                                     .resizable()
                                     .frame(width: 40, height: 40)
-                                    .foregroundStyle(.white)
+                                    .foregroundStyle(Color(.systemGray4))
                                     .shadow(radius: 2)
                             }
                         }

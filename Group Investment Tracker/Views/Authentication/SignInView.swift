@@ -14,88 +14,84 @@ struct SignInView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color("BackgroundColor").edgesIgnoringSafeArea(.all)
+            VStack(spacing: 20) {
+                LogoView()
                 
-                VStack(spacing: 20) {
-                    LogoView()
+                ZStack {
+                    RoundedRectangle(cornerRadius: 7)
+                        .frame(height: 70)
+                        .foregroundColor(Color(.systemGray6))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color("AccentColor"), lineWidth: 1)
+                        }
                     
+                    TextField("Email", text: $user.email)
+                        .font(Font.body.bold())
+                        .padding()
+                }
+                
+                VStack(alignment: .trailing) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 7)
                             .frame(height: 70)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(.systemGray6))
                             .overlay {
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color("AccentColor"), lineWidth: 1)
                             }
                         
-                        TextField("Email", text: $user.email)
-                            .font(Font.body.bold())
-                            .padding()
-                    }
-                    
-                    VStack(alignment: .trailing) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 7)
-                            .frame(height: 70)
-                            .foregroundColor(.white)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color("AccentColor"), lineWidth: 1)
+                        HStack {
+                            if showPassword {
+                                TextField("Password", text: $user.password)
+                                    .textContentType(.password)
+                                    .font(Font.body.bold())
+                            } else {
+                                SecureField("Password", text: $user.password)
+                                    .textContentType(.password)
+                                    .font(Font.body.bold())
                             }
-                        
-                            HStack {
-                                if showPassword {
-                                    TextField("Password", text: $user.password)
-                                        .textContentType(.password)
-                                        .font(Font.body.bold())
-                                } else {
-                                    SecureField("Password", text: $user.password)
-                                        .textContentType(.password)
-                                        .font(Font.body.bold())
-                                }
-                                
-                                Button {
-                                    showPassword.toggle()
-                                } label: {
-                                    Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
-                                }
-                                .foregroundStyle(.placeholder)
+                            
+                            Button {
+                                showPassword.toggle()
+                            } label: {
+                                Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
                             }
+                            .foregroundStyle(.placeholder)
+                        }
                         .padding()
                     }
                     NavigationLink("Forgot Password") {
                         ForgotPasswordView()
                     }
-                        
-                        
-                    }
-                    
-                    Button {
-                        verifyUser()
-                    } label: {
-                        RoundedRectangle(cornerRadius: 20)
-                            .frame(width: 150, height: 50)
-                            .foregroundColor(Color("AccentColor"))
-                            .overlay(Text("Sign Ip").foregroundColor(.white))
-                    }
-                    .padding(20)
-                    .padding(.horizontal, 10)
                     
                     
-                    HStack {
-                        Text("Don't have an account?")
-                        NavigationLink(destination: SignUpView()) {
-                            Text("Sign Up")
-                        }
-                        .foregroundStyle(Color("AccentColor"))
-                    }
-                    .padding(.top, 20)
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 20)
-                .navigationBarBackButtonHidden(true)
+                
+                Button {
+                    verifyUser()
+                } label: {
+                    RoundedRectangle(cornerRadius: 20)
+                        .frame(width: 150, height: 50)
+                        .foregroundColor(Color("AccentColor"))
+                        .overlay(Text("Sign Ip").foregroundColor(.white))
+                }
+                .padding(20)
+                .padding(.horizontal, 10)
+                
+                
+                HStack {
+                    Text("Don't have an account?")
+                    NavigationLink(destination: SignUpView()) {
+                        Text("Sign Up")
+                    }
+                    .foregroundStyle(Color("AccentColor"))
+                }
+                .padding(.top, 20)
             }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 20)
+            .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $verified) {
                 ClubsView()
             }

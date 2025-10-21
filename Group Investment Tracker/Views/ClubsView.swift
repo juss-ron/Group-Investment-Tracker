@@ -20,8 +20,7 @@ struct ClubsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.background
-                    .ignoresSafeArea(edges: .all)
+                //Color.background .ignoresSafeArea(edges: .all)
                 VStack(alignment: .leading) {
                     HStack {
                         Text("Clubs")
@@ -74,7 +73,7 @@ struct ClubsView: View {
                                     Text(club.inHand.description)
                                         .padding()
                                 }
-                                .background(.white)
+                                .background(Color(.systemGray6))
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(.accent))
                                 .padding(.top, 10)

@@ -13,9 +13,6 @@ struct ForgotPasswordView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color("BackgroundColor").edgesIgnoringSafeArea(.all)
-                
                 VStack(spacing: 20) {
                     LogoView()
                     
@@ -26,7 +23,7 @@ struct ForgotPasswordView: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 7)
                             .frame(height: 70)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(.systemGray6))
                             .overlay {
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color("AccentColor"), lineWidth: 1)
@@ -52,7 +49,6 @@ struct ForgotPasswordView: View {
                 .padding(.bottom, 20)
                 .navigationTitle("Forgot Password")
                 .navigationBarTitleDisplayMode(.inline)
-            }
             .navigationDestination(isPresented: $emailSent) {
                 VerifyEmailView()
             }

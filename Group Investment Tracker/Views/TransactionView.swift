@@ -49,7 +49,7 @@ struct TransactionView: View {
                     cancel()
                 } label: {
                     ZStack {
-                        RoundedRectangle(cornerRadius: 10).foregroundStyle(.gray.opacity(0.2))
+                        RoundedRectangle(cornerRadius: 10).stroke(.accent, lineWidth: 1)
                         Text("Cancel")
                     }
                 }
@@ -57,7 +57,7 @@ struct TransactionView: View {
                     newTransaction()
                 } label: {
                     ZStack {
-                        RoundedRectangle(cornerRadius: 10).foregroundStyle(.gray.opacity(0.2))
+                        RoundedRectangle(cornerRadius: 10).stroke(.accent, lineWidth: 1)
                         Text("Create")
                     }
                 }

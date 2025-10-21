@@ -14,16 +14,13 @@ struct SignUpView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color("BackgroundColor").edgesIgnoringSafeArea(.all)
-                
                 VStack(spacing: 20) {
                     LogoView()
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
                             .frame(height: 70)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(.systemGray6))
                             .overlay {
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color("AccentColor"), lineWidth: 1)
@@ -37,7 +34,7 @@ struct SignUpView: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 7)
                             .frame(height: 70)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(.systemGray6))
                             .overlay {
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color("AccentColor"), lineWidth: 1)
@@ -51,7 +48,7 @@ struct SignUpView: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 7)
                             .frame(height: 70)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color(.systemGray6))
                             .overlay {
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color("AccentColor"), lineWidth: 1)
@@ -100,7 +97,6 @@ struct SignUpView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 20)
                 .navigationBarBackButtonHidden(true)
-            }
             .navigationDestination(isPresented: $accountCreated) {
                 ClubsView()
             }
