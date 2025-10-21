@@ -33,20 +33,20 @@ struct ResetPasswordView: View {
                         }
                     
                     HStack {
-                        if showPassword {
-                            TextField("Password", text: $password)
-                                .textContentType(.password)
-                                .font(Font.body.bold())
-                        } else {
-                            SecureField("Password", text: $password)
-                                .textContentType(.password)
-                                .font(Font.body.bold())
+                        Group {
+                            if showPassword {
+                                TextField("Password", text: $password)
+                            } else {
+                                SecureField("Password", text: $password)
+                            }
                         }
+                        .textContentType(.password)
+                        .font(Font.body.bold())
                         
                         Button {
                             showPassword.toggle()
                         } label: {
-                            Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                            Image(systemName: showPassword ? "eye.fill" : "eye.slash.fill")
                         }
                         .foregroundStyle(.placeholder)
                     }
@@ -76,7 +76,7 @@ struct ResetPasswordView: View {
                         Button {
                             showPasswordConfirmation.toggle()
                         } label: {
-                            Image(systemName: showPasswordConfirmation ? "eye.slash.fill" : "eye.fill")
+                            Image(systemName: showPasswordConfirmation ? "eye.fill" : "eye.slash.fill")
                         }
                         .foregroundStyle(.placeholder)
                     }
@@ -105,15 +105,11 @@ struct ResetPasswordView: View {
     }
 }
 
-
 extension ResetPasswordView {
     func reset() {
         complete = true
     }
 }
-
-
-
 
 #Preview {
     ResetPasswordView()

@@ -56,16 +56,11 @@ struct VerifyEmailView: View {
     }
 }
 
-
-
 extension VerifyEmailView {
     func verify() {
         verified = true
     }
 }
-
-
-
 
 #Preview {
     VerifyEmailView()

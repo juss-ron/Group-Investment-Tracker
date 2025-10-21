@@ -15,8 +15,6 @@ struct ClubView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                //Color.background.ignoresSafeArea(edges: .all)
-                
                 VStack {
                     HStack(spacing: 10) {
                         Button {
@@ -183,36 +181,47 @@ struct ClubView: View {
                     }
                 }
                 
-                //Plus sign for adding more members
-                VStack() {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        Button {
-                            createViewIsPresented.toggle()
-                        } label: {
-                            Image(systemName: "plus.circle")
-                                .resizable()
-                                .frame(width: 50, height: 50)
-                                .padding(20)
-                                .foregroundStyle(.accent)
-                        }
-                    }
-                }
                 
-                //View that allows you to enter informantion for a new user
+                newMemberButton
+                
+                
                 if createViewIsPresented {
-                    ZStack {
-                        Color.clear
-                        CreateNewView(itemToCreate: .member, clubs: .constant(nil), members: $club.members.optional(), isPresented: $createViewIsPresented)
-                            .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.accentColor, lineWidth: 2))
-                            .padding()
-                    }
-                    .background(.ultraThinMaterial)
+                    addMemberView
                 }
             }
         }
         .navigationBarBackButtonHidden(true)
+    }
+}
+
+//Assistant views
+extension ClubView {
+    var newMemberButton: some View {
+        VStack() {
+            Spacer()
+            HStack {
+                Spacer()
+                Button {
+                    createViewIsPresented.toggle()
+                } label: {
+                    Image(systemName: "plus.circle")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .padding(20)
+                        .foregroundStyle(.accent)
+                }
+            }
+        }
+    }
+    
+    var addMemberView: some View {
+        ZStack {
+            Color.clear
+            CreateNewView(itemToCreate: .member, clubs: .constant(nil), members: $club.members.optional(), isPresented: $createViewIsPresented)
+                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.accentColor, lineWidth: 2))
+                .padding()
+        }
+        .background(.ultraThinMaterial)
     }
 }
 

@@ -61,11 +61,9 @@ struct SignInView: View {
                         }
                         .padding()
                     }
-                    NavigationLink("Forgot Password") {
+                    NavigationLink("Forgot Password?") {
                         ForgotPasswordView()
                     }
-                    
-                    
                 }
                 
                 Button {
@@ -74,11 +72,10 @@ struct SignInView: View {
                     RoundedRectangle(cornerRadius: 20)
                         .frame(width: 150, height: 50)
                         .foregroundColor(Color("AccentColor"))
-                        .overlay(Text("Sign Ip").foregroundColor(.white))
+                        .overlay(Text("Sign In").foregroundColor(.white))
                 }
                 .padding(20)
                 .padding(.horizontal, 10)
-                
                 
                 HStack {
                     Text("Don't have an account?")
@@ -99,16 +96,11 @@ struct SignInView: View {
     }
 }
 
-
-
 extension SignInView {
     func verifyUser() {
         verified = true
     }
 }
-
-
-
 
 #Preview {
     SignInView()

@@ -20,7 +20,6 @@ struct ClubsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                //Color.background .ignoresSafeArea(edges: .all)
                 VStack(alignment: .leading) {
                     HStack {
                         Text("Clubs")
@@ -84,37 +83,48 @@ struct ClubsView: View {
                     }
                 }
                 
-                VStack() {
-                    Spacer()
-                    
-                    HStack {
-                        Spacer()
-                        
-                        Button {
-                            createViewIsPresented.toggle()
-                        } label: {
-                            Image(systemName: "plus.circle")
-                                .resizable()
-                                .frame(width: 50, height: 50)
-                                .padding(20)
-                                .foregroundStyle(.accent)
-                        }
-                    }
-                }
+                addbuttonView
                 
                 if createViewIsPresented {
-                    ZStack {
-                        Color.clear
-                        
-                        CreateNewView(itemToCreate: .club, clubs: $clubs.optional(), members: .constant(nil), isPresented: $createViewIsPresented)
-                            .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.accentColor, lineWidth: 2))
-                            .padding()
-                    }
-                    .background(.ultraThinMaterial)
+                    createNewClub
                 }
             }
             .navigationBarBackButtonHidden(true)
         }
+    }
+}
+
+//Assistant Views
+extension ClubsView {
+    var addbuttonView: some View {
+        VStack() {
+            Spacer()
+            
+            HStack {
+                Spacer()
+                
+                Button {
+                    createViewIsPresented.toggle()
+                } label: {
+                    Image(systemName: "plus.circle")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .padding(20)
+                        .foregroundStyle(.accent)
+                }
+            }
+        }
+    }
+    
+    var createNewClub: some View {
+        ZStack {
+            Color.clear
+            
+            CreateNewView(itemToCreate: .club, clubs: $clubs.optional(), members: .constant(nil), isPresented: $createViewIsPresented)
+                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.accentColor, lineWidth: 2))
+                .padding()
+        }
+        .background(.ultraThinMaterial)
     }
 }
 
