@@ -10,7 +10,7 @@ import SwiftUI
 struct ClubView: View {
     @Binding var club: Club
     @State private var createViewIsPresented: Bool = false
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         NavigationStack {
@@ -18,7 +18,7 @@ struct ClubView: View {
                 VStack {
                     HStack(spacing: 10) {
                         Button {
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                         } label: {
                             ZStack {
                                 Image(systemName: "circle.fill")

@@ -12,45 +12,43 @@ struct ForgotPasswordView: View {
     @State private var email: String = ""
     
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 20) {
-                LogoView()
+        VStack(spacing: 20) {
+            LogoView()
+            
+            Text("Enter the email address associated with your account.")
+                .multilineTextAlignment(.center)
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 7)
+                    .frame(height: 70)
+                    .foregroundColor(Color(.systemGray6))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color("AccentColor"), lineWidth: 1)
+                    }
                 
-                Text("Enter the email address associated with your account.")
-                    .multilineTextAlignment(.center)
-                
-                ZStack {
-                    RoundedRectangle(cornerRadius: 7)
-                        .frame(height: 70)
-                        .foregroundColor(Color(.systemGray6))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color("AccentColor"), lineWidth: 1)
-                        }
-                    
-                    TextField("Email", text: $email)
-                        .font(Font.body.bold())
-                        .padding()
-                }
-                
-                Button {
-                    sendEmail()
-                } label: {
-                    RoundedRectangle(cornerRadius: 20)
-                        .frame(width: 150, height: 50)
-                        .foregroundColor(Color("AccentColor"))
-                        .overlay(Text("Send code").foregroundColor(.white))
-                }
-                .padding(20)
-                .padding(.horizontal, 10)
+                TextField("Email", text: $email)
+                    .font(Font.body.bold())
+                    .padding()
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 20)
-            .navigationTitle("Forgot Password")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(isPresented: $emailSent) {
-                VerifyEmailView()
+            
+            Button {
+                sendEmail()
+            } label: {
+                RoundedRectangle(cornerRadius: 20)
+                    .frame(width: 150, height: 50)
+                    .foregroundColor(Color("AccentColor"))
+                    .overlay(Text("Send code").foregroundColor(.white))
             }
+            .padding(20)
+            .padding(.horizontal, 10)
+        }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 20)
+        .navigationTitle("Forgot Password")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(isPresented: $emailSent) {
+            VerifyEmailView()
         }
     }
 }

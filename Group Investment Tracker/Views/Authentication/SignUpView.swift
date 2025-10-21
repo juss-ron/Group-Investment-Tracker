@@ -13,93 +13,91 @@ struct SignUpView: View {
     @State private var accountCreated: Bool = false
     
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 20) {
-                LogoView()
-                
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(height: 70)
-                        .foregroundColor(Color(.systemGray6))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color("AccentColor"), lineWidth: 1)
-                        }
-                    
-                    TextField("Username", text: $user.username)
-                        .font(Font.body.bold())
-                        .padding()
-                }
-                
-                ZStack {
-                    RoundedRectangle(cornerRadius: 7)
-                        .frame(height: 70)
-                        .foregroundColor(Color(.systemGray6))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color("AccentColor"), lineWidth: 1)
-                        }
-                    
-                    TextField("Email", text: $user.email)
-                        .font(Font.body.bold())
-                        .padding()
-                }
-                
-                ZStack {
-                    RoundedRectangle(cornerRadius: 7)
-                        .frame(height: 70)
-                        .foregroundColor(Color(.systemGray6))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color("AccentColor"), lineWidth: 1)
-                        }
-                    
-                    HStack {
-                        if showPassword {
-                            TextField("Password", text: $user.password)
-                                .textContentType(.password)
-                                .font(Font.body.bold())
-                        } else {
-                            SecureField("Password", text: $user.password)
-                                .textContentType(.password)
-                                .font(Font.body.bold())
-                        }
-                        
-                        Button {
-                            showPassword.toggle()
-                        } label: {
-                            Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
-                        }
-                        .foregroundStyle(.placeholder)
+        VStack(spacing: 20) {
+            LogoView()
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .frame(height: 70)
+                    .foregroundColor(Color(.systemGray6))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color("AccentColor"), lineWidth: 1)
                     }
+                
+                TextField("Username", text: $user.username)
+                    .font(Font.body.bold())
                     .padding()
-                }
+            }
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 7)
+                    .frame(height: 70)
+                    .foregroundColor(Color(.systemGray6))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color("AccentColor"), lineWidth: 1)
+                    }
+                
+                TextField("Email", text: $user.email)
+                    .font(Font.body.bold())
+                    .padding()
+            }
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 7)
+                    .frame(height: 70)
+                    .foregroundColor(Color(.systemGray6))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color("AccentColor"), lineWidth: 1)
+                    }
                 
                 HStack {
-                    Text("Already have an account?")
-                    NavigationLink(destination: SignInView()) {
-                        Text("Sign In")
+                    if showPassword {
+                        TextField("Password", text: $user.password)
+                            .textContentType(.password)
+                            .font(Font.body.bold())
+                    } else {
+                        SecureField("Password", text: $user.password)
+                            .textContentType(.password)
+                            .font(Font.body.bold())
                     }
-                    .foregroundStyle(Color("AccentColor"))
+                    
+                    Button {
+                        showPassword.toggle()
+                    } label: {
+                        Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                    }
+                    .foregroundStyle(.placeholder)
                 }
-                .padding(20)
-                .padding(.bottom, 10)
-                
-                Button {
-                    createUser()
-                } label: {
-                    RoundedRectangle(cornerRadius: 20)
-                        .frame(width: 150, height: 50)
-                        .foregroundColor(Color("AccentColor"))
-                        .overlay(Text("Sign Up").foregroundColor(.white))
+                .padding()
+            }
+            
+            HStack {
+                Text("Already have an account?")
+                NavigationLink(destination: SignInView()) {
+                    Text("Sign In")
                 }
+                .foregroundStyle(Color("AccentColor"))
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 20)
-            .navigationBarBackButtonHidden(true)
-            .navigationDestination(isPresented: $accountCreated) {
-                ClubsView()
+            .padding(20)
+            .padding(.bottom, 10)
+            
+            Button {
+                createUser()
+            } label: {
+                RoundedRectangle(cornerRadius: 20)
+                    .frame(width: 150, height: 50)
+                    .foregroundColor(Color("AccentColor"))
+                    .overlay(Text("Sign Up").foregroundColor(.white))
             }
+        }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 20)
+        .navigationBarBackButtonHidden(true)
+        .navigationDestination(isPresented: $accountCreated) {
+            ClubsView()
         }
     }
 }

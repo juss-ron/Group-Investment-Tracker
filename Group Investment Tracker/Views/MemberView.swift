@@ -10,14 +10,14 @@ import SwiftUI
 struct MemberView: View {
     @State private var createViewIsPresented: Bool = false
     @Binding var member: Member
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack {
             VStack {
                 HStack(spacing: 10) {
                     Button {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } label: {
                         ZStack {
                             Image(systemName: "circle.fill")
