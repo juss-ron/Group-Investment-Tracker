@@ -38,8 +38,8 @@ struct ClubsView: View {
                                     .frame(width: 30, height: 25)
                             }
                             
-                            Button {
-                                
+                            NavigationLink {
+                                ProfileView()
                             } label: {
                                 Image(systemName: "person")
                                     .resizable()
