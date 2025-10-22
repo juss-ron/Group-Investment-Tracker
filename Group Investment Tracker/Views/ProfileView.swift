@@ -234,16 +234,84 @@ struct ProfileView: View {
                 .fontWeight(.bold)
                 
                 HStack(spacing: 20) {
-                    ForEach(themes) { theme in
-                        VStack {
-                            theme.color
-                                .padding(.vertical, 20)
-                                .padding(.horizontal, 10)
-                                .frame(maxWidth: .infinity)
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(.accent, lineWidth: 1))
-                            
-                            Text(theme.rawValue)
+                    VStack {
+                        Color.white
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 100)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        
+                        Text("Light")
+                    }
+                    
+                    VStack {
+                        Color.black
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 100)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        
+                        Text("Dark")
+                    }
+                    
+                    VStack {
+                        ZStack {
+                            Color.white
+                            HStack {
+                                Color.clear
+                                Color.black
+                            }
                         }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 100)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        
+                        Text("System")
+                    }
+                }
+                .padding(.horizontal, 30)
+                .padding(.vertical)
+                .background(Color(.systemGray6))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(.accent, lineWidth: 1))
+            }
+            .padding()
+            
+            //MARK: Accent Color
+            VStack {
+                HStack {
+                    Text("Accent Color:")
+                        .padding(.horizontal, 20)
+                        .font(.title2)
+                    
+                    Spacer()
+                }
+                .fontWeight(.bold)
+                
+                HStack(spacing: 20) {
+                    VStack {
+                        Color.cyan
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 100)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        
+                        Text("Cyan")
+                    }
+                    
+                    VStack {
+                        Color.orange
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 100)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        
+                        Text("Orange")
+                    }
+                    
+                    VStack {
+                        Color.purple
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 100)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        
+                        Text("Purple")
                     }
                 }
                 .padding(.horizontal, 30)
