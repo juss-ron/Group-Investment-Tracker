@@ -9,7 +9,7 @@ import Foundation
 
 /// This is for each individual member within a club
 struct Member: Codable, Identifiable {
-    var id: UUID = UUID()
+    var id: String = ""
     var name: String
     var email: String
     

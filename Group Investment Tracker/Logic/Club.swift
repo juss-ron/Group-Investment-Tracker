@@ -8,7 +8,7 @@
 import Foundation
 
 struct Club: Codable, Identifiable {
-    var id: UUID = UUID()
+    var id: String = ""
     var title: String
     var members: [Member] = []
     
