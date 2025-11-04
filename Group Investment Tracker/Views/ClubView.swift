@@ -41,7 +41,7 @@ struct ClubView: View {
                             .padding(.leading, 5)
                         
                         VStack(alignment: .leading) {
-                            Text(club.name)
+                            Text(club.title)
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                             Text(club.members.count.description + " Members")
@@ -226,7 +226,7 @@ extension ClubView {
 }
 
 #Preview {
-    ClubView(club: .constant(Club(name: "Res", members: [
+    ClubView(club: .constant(Club(title: "Res", members: [
         Member(name: "John", email: "john@gmail.com"),
         Member(name: "Emily", email: "emily@apple.com")
     ])))

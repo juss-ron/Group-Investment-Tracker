@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CreateNewView: View {
     var itemToCreate: ItemToCreate
+    let service = ClubService()
     @State private var name: String = ""
     @State private var email: String = ""
     @Binding var clubs: [Club]?
@@ -84,7 +85,14 @@ extension CreateNewView {
     func createNewItem() {
         guard !name.isEmpty else { return }
         if itemToCreate == .club {
-            clubs!.append(Club(name: name))
+            Task {
+                do {
+                    let response = try await service.createClub(Club(title: name))
+                    print(response.message)
+                } catch {
+                    print("Failed to create club: \(error)")
+                }
+            }
         } else {
             guard verifyEmail(email) else { return }
             members!.append(Member(name: name, email: email))
@@ -101,5 +109,5 @@ extension CreateNewView {
 }
 
 #Preview {
-    CreateNewView(itemToCreate: .member,clubs: .constant(nil), members: .constant([]), isPresented: .constant(true))
+    CreateNewView(itemToCreate: .club, clubs: .constant(nil), members: .constant([]), isPresented: .constant(true))
 }
