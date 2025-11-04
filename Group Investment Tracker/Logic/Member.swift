@@ -8,7 +8,7 @@
 import Foundation
 
 /// This is for each individual member within a club
-struct Member: Identifiable {
+struct Member: Codable, Identifiable {
     var id: UUID = UUID()
     var name: String
     var email: String
