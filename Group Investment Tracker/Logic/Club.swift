@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct Club: Identifiable {
+struct Club: Codable, Identifiable {
     var id: UUID = UUID()
-    var name: String
+    var title: String
     var members: [Member] = []
     
     var totalMembers: Int { members.count }
