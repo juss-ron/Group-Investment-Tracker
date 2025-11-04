@@ -25,13 +25,11 @@ class ClubService {
             throw URLError(.badServerResponse)
         }
         
-        print("📦 Raw response:", String(data: data, encoding: .utf8) ?? "nil")
-        
         return try JSONDecoder().decode([Club].self, from: data)
     }
     
     // Create a new club
-    func createClub(_ club: Club) async throws -> Response {
+    func create(_ club: Club) async throws -> Response {
         var request = URLRequest(url: baseURL)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -47,11 +45,11 @@ class ClubService {
         return try JSONDecoder().decode(Response.self, from: data)
     }
     
-    // Update a todo
-    func updateTodo(_ club: Club) async throws -> Response {
-        let url = baseURL.appendingPathComponent("/todos/\(club.id)")
+    // Update a club
+    func update(_ club: Club) async throws -> Response {
+        let url = baseURL.appendingPathComponent("\(club.id)")
         var request = URLRequest(url: url)
-        request.httpMethod = "PUT"
+        request.httpMethod = "PATCH"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.httpBody = try JSONEncoder().encode(club)
@@ -65,11 +63,26 @@ class ClubService {
         return try JSONDecoder().decode(Response.self, from: data)
     }
     
-//    // Delete a todo
-//    func deleteTodo(id: Int) async throws {
-//        let url = baseURL.appendingPathComponent("/todos/\(id)")
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "DELETE"
-//        _ = try await URLSession.shared.data(for: request)
-//    }
+    // Delete a club
+    func delete(_ club: Club) async throws -> Response {
+        let url = baseURL.appendingPathComponent(club.id)
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+
+        if !(200...299).contains(httpResponse.statusCode) {
+            let body = String(data: data, encoding: .utf8) ?? "No response body"
+            print("❌ Delete failed — status: \(httpResponse.statusCode), body: \(body)")
+            throw URLError(.badServerResponse)
+        }
+
+        return try JSONDecoder().decode(Response.self, from: data)
+    }
 }

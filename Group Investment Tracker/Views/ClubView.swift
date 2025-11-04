@@ -11,6 +11,8 @@ struct ClubView: View {
     @Binding var club: Club
     @State private var createViewIsPresented: Bool = false
     @Environment(\.dismiss) var dismiss
+    @State private var showDeleteAlert: Bool = false
+    let service = ClubService()
     
     var body: some View {
         NavigationStack {
@@ -56,6 +58,15 @@ struct ClubView: View {
                             Image(systemName: "message")
                                 .resizable()
                                 .frame(width: 30, height: 25)
+                        }
+                        
+                        Button {
+                            showDeleteAlert.toggle()
+                        } label: {
+                            Image(systemName: "trash")
+                                .resizable()
+                                .frame(width:25, height: 25)
+                                .foregroundStyle(.red)
                         }
                     }
                     .padding()
@@ -179,8 +190,24 @@ struct ClubView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .padding()
                     }
+                    .alert("Delete Club", isPresented: $showDeleteAlert) {
+                        Button("Delete", role: .destructive) {
+                            Task {
+                                do {
+                                    let response = try await service.delete(club)
+                                    print(response.message)
+                                    dismiss()
+                                } catch {
+                                    print("Cannot delete club: \(error)")
+                                }
+                            }
+                        }
+                        Button("Cancel", role: .cancel) {   }
+                    } message: {
+                        Text("Are you sure you want to delete this club?")
+                        Text("This action cannot be undone.")
+                    }
                 }
-                
                 
                 newMemberButton
                 

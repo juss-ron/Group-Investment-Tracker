@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CreateNewView: View {
     var itemToCreate: ItemToCreate
-    let service = ClubService()
+    let clubService = ClubService()
     @State private var name: String = ""
     @State private var email: String = ""
     @Binding var clubs: [Club]?
@@ -87,7 +87,7 @@ extension CreateNewView {
         if itemToCreate == .club {
             Task {
                 do {
-                    let response = try await service.createClub(Club(title: name))
+                    let response = try await clubService.create(Club(title: name))
                     print(response.message)
                 } catch {
                     print("Failed to create club: \(error)")

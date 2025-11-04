@@ -81,7 +81,7 @@ struct ClubsView: View {
                     Task {
                         do {
                             clubs = try await service.fetchClubs()
-                            print(clubs)
+                            print("Retrieved clubs")
                         } catch {
                             print("Failed to get clubs: \(error)")
                         }
@@ -103,7 +103,7 @@ struct ClubsView: View {
                             Task {
                                 do {
                                     clubs = try await service.fetchClubs()
-                                    print(clubs)
+                                    print("Retrieved clubs")
                                 } catch {
                                     print("Failed to get clubs: \(error)")
                                 }
