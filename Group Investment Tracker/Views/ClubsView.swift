@@ -8,14 +8,9 @@
 import SwiftUI
 
 struct ClubsView: View {
-    @State private var clubs: [Club] = [
-        Club(name: "MCRI", members: [Member(name: "Jane", email: "jane@gmail.com")]),
-        Club(name: "Res", members: [
-            Member(name: "John", email: "john@gmail.com"),
-            Member(name: "Emily", email: "emily@apple.com")
-        ])
-    ]
+    @State private var clubs: [Club] = []
     @State private var createViewIsPresented: Bool = false
+    let service = ClubService()
     
     var body: some View {
         NavigationStack {
@@ -65,7 +60,7 @@ struct ClubsView: View {
                                         .shadow(radius: 5)
                                         .padding()
                                     
-                                    Text(club.name)
+                                    Text(club.title)
                                     
                                     Spacer()
                                     
@@ -82,14 +77,42 @@ struct ClubsView: View {
                         }
                     }
                 }
+                .onAppear {
+                    Task {
+                        do {
+                            clubs = try await service.fetchClubs()
+                            print(clubs)
+                        } catch {
+                            print("Failed to get clubs: \(error)")
+                        }
+                    }
+                }
+                
+                
+                if clubs.count == 0 {
+                    Text("No accounts, tap '+' to create a new one.")
+                        .font(.callout)
+                        .multilineTextAlignment(.center)
+                }
                 
                 addbuttonView
                 
                 if createViewIsPresented {
                     createNewClub
+                        .onDisappear() {
+                            Task {
+                                do {
+                                    clubs = try await service.fetchClubs()
+                                    print(clubs)
+                                } catch {
+                                    print("Failed to get clubs: \(error)")
+                                }
+                            }
+                        }
                 }
             }
             .navigationBarBackButtonHidden(true)
+            
         }
     }
 }
