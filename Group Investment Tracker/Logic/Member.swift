@@ -10,16 +10,16 @@ import Foundation
 /// This is for each individual member within a club
 struct Member: Codable, Identifiable {
     var id: String = ""
-    var name: String
+    var username: String
     var email: String
     
     var investment: Int = 0
-    var interestAccrued: Int = 0
-    var totalInvestment: Int { investment + interestAccrued }
+    var interestAcrued: Int = 0
+    var totalInvestment: Int = 0
     
     var owing: Int = 0
     var interestOwing: Int = 0
-    var totalOwing: Int { owing + interestOwing }
+    var totalOwing: Int = 0
     
     ///Adds to the investment the member has made
     mutating func payInvestment(_ amount: Int) {
@@ -35,7 +35,7 @@ struct Member: Codable, Identifiable {
                 interestOwing = 0
             }
         }
-        interestAccrued += amount
+        interestAcrued += amount
     }
     
     ///Reduces amount a user owes

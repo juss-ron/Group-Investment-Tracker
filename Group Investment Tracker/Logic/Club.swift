@@ -14,7 +14,7 @@ struct Club: Codable, Identifiable {
     
     var totalMembers: Int { members.count }
     var totalInvestment: Int { members.reduce(0) { $0 + $1.investment } }
-    var totalInterest: Int {members.reduce(0) { $0 + $1.interestAccrued} }
+    var totalInterest: Int {members.reduce(0) { $0 + $1.interestAcrued} }
     var owed: Int { members.reduce(0) { $0 + $1.owing} }
     var totalOwed: Int { members.reduce(0) { $0 + $1.totalOwing} }
     var inHand: Int { totalInvestment + totalInterest - owed }

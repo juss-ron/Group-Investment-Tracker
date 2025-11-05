@@ -40,7 +40,7 @@ struct MemberView: View {
                         .padding(.leading, 5)
                     
                     VStack(alignment: .leading) {
-                        Text(member.name)
+                        Text(member.username)
                             .font(.largeTitle)
                             .fontWeight(.bold)
                         Text(member.email)
@@ -86,7 +86,7 @@ struct MemberView: View {
                             VStack {
                                 Text("Interest")
                                     .padding(.bottom, 2)
-                                Text(member.interestAccrued.description)
+                                Text(member.interestAcrued.description)
                                     .font(Font.title2.bold())
                             }
                             .padding(.vertical, 20)
@@ -189,5 +189,5 @@ struct MemberView: View {
 }
 
 #Preview {
-    MemberView(member: .constant(Member(name: "Ron", email: "ron@example.com")))
+    MemberView(member: .constant(Member(username: "Ron", email: "ron@example.com")))
 }

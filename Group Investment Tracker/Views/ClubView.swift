@@ -13,6 +13,7 @@ struct ClubView: View {
     @Environment(\.dismiss) var dismiss
     @State private var showDeleteAlert: Bool = false
     let service = ClubService()
+    let memberService = MemberService()
     
     var body: some View {
         NavigationStack {
@@ -46,7 +47,7 @@ struct ClubView: View {
                             Text(club.title)
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
-                            Text(club.members.count.description + " Members")
+                            Text(club.members.count.description + (club.members.count > 1 ? " Members" : " Member"))
                                 .font(.caption)
                         }
                         
@@ -156,7 +157,7 @@ struct ClubView: View {
                                         MemberView(member: $member)
                                     } label: {
                                         VStack(alignment: .leading) {
-                                            Text(member.name)
+                                            Text(member.username)
                                                 .font(Font.title2.bold())
                                                 .padding(.bottom, 5)
                                             
@@ -164,7 +165,7 @@ struct ClubView: View {
                                                 HStack {
                                                     Text("Interest")
                                                     Spacer()
-                                                    Text(member.interestAccrued.description)
+                                                    Text(member.interestAcrued.description)
                                                 }
                                                 HStack {
                                                     Text("Owing")
@@ -214,6 +215,16 @@ struct ClubView: View {
                 
                 if createViewIsPresented {
                     addMemberView
+                        .onDisappear {
+                            Task {
+                                do {
+                                    club.members = try await memberService.fetchMembers(in: club)
+                                    print("Successfully fetched members")
+                                } catch {
+                                    print("Faliled to get members: \(error)")
+                                }
+                            }
+                        }
                 }
             }
         }
@@ -244,7 +255,7 @@ extension ClubView {
     var addMemberView: some View {
         ZStack {
             Color.clear
-            CreateNewView(itemToCreate: .member, clubs: .constant(nil), members: $club.members.optional(), isPresented: $createViewIsPresented)
+            CreateNewView(itemToCreate: .member, club: club, isPresented: $createViewIsPresented)
                 .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.accentColor, lineWidth: 2))
                 .padding()
         }
@@ -254,7 +265,7 @@ extension ClubView {
 
 #Preview {
     ClubView(club: .constant(Club(title: "Res", members: [
-        Member(name: "John", email: "john@gmail.com"),
-        Member(name: "Emily", email: "emily@apple.com")
+        Member(username: "John", email: "john@gmail.com"),
+        Member(username: "Emily", email: "emily@apple.com")
     ])))
 }

@@ -17,7 +17,7 @@ struct TransactionView: View {
     
     var body: some View{
         VStack(spacing: 20) {
-            Text(member.name)
+            Text(member.username)
                 .font(Font.largeTitle)
             HStack {
                 Text("Pay Investment: ")
@@ -85,7 +85,7 @@ extension TransactionView {
 }
 
 #Preview {
-    TransactionView(isPresented: .constant(true), member: .constant(Member(name: "Jack Sparrow", email: "sparrow@gmail.com")))
+    TransactionView(isPresented: .constant(true), member: .constant(Member(username: "Jack Sparrow", email: "sparrow@gmail.com")))
 }
 
 
