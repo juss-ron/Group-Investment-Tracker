@@ -154,7 +154,17 @@ struct ClubView: View {
                             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                                 ForEach($club.members) { $member in
                                     NavigationLink {
-                                        MemberView(member: $member)
+                                        MemberView(member: $member, club: club) {
+                                            Task {
+                                                do {
+                                                    try await Task.sleep(for: .seconds(1.5))
+                                                    club.members = try await memberService.fetchMembers(in: club)
+                                                    print("refreshed members")
+                                                } catch {
+                                                    print("failed to refresh members: \(error)")
+                                                }
+                                            }
+                                        }
                                     } label: {
                                         VStack(alignment: .leading) {
                                             Text(member.username)

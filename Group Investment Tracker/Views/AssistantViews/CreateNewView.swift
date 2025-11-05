@@ -92,6 +92,7 @@ extension CreateNewView {
                 do {
                     let response = try await clubService.create(club)
                     print(response.message)
+                    isPresented.toggle()
                 } catch {
                     print("Failed to create club: \(error)")
                 }
@@ -101,12 +102,12 @@ extension CreateNewView {
                 do {
                     let response = try await memberService.add(member, to: club)
                     print(response.message)
+                    isPresented.toggle()
                 } catch {
                     print("Failed to create member: \(error)")
                 }
             }
         }
-        isPresented.toggle()
     }
     
     func verifyEmail(_ email: String) -> Bool {
