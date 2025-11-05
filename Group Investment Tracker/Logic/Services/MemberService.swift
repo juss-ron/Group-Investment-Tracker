@@ -35,6 +35,30 @@ class MemberService {
         return try JSONDecoder().decode([Member].self, from: data)
     }
     
+    // Fetch one member
+    func fetch(member: Member, from club: Club) async throws -> Member {
+        let url = baseURL.appendingPathComponent(member.id)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue(club.id, forHTTPHeaderField: "ClubId")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+
+        if !(200...299).contains(httpResponse.statusCode) {
+            let body = String(data: data, encoding: .utf8) ?? "No response body"
+            print("❌ Fetch failed — status: \(httpResponse.statusCode), body: \(body)")
+            throw URLError(.badServerResponse)
+        }
+        
+        return try JSONDecoder().decode(Member.self, from: data)
+    }
+    
     // Create a new member
     func add(_ member: Member, to club: Club) async throws -> Response {
         var request = URLRequest(url: baseURL)
