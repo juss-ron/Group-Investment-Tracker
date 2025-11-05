@@ -12,10 +12,10 @@ struct Club: Codable, Identifiable {
     var title: String
     var members: [Member] = []
     
-    var totalMembers: Int { members.count }
-    var totalInvestment: Int { members.reduce(0) { $0 + $1.investment } }
-    var totalInterest: Int {members.reduce(0) { $0 + $1.interestAcrued} }
-    var owed: Int { members.reduce(0) { $0 + $1.owing} }
-    var totalOwed: Int { members.reduce(0) { $0 + $1.totalOwing} }
-    var inHand: Int { totalInvestment + totalInterest - owed }
+    var totalMembers: Int = 0
+    var totalInvestment: Int = 0
+    var totalInterest: Int = 0
+    var owed: Int = 0
+    var totalOwed: Int = 0
+    var inHand: Int = 0
 }
