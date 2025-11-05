@@ -44,7 +44,7 @@ struct FirstView: View {
                 Spacer()
             }
             .navigationDestination(isPresented: $navigate) {
-                SignUpView()
+                SignInView()
             }
         }
     }

@@ -115,11 +115,11 @@ extension SignInView {
                 token = response.token ?? "No token"
                 print(token)
                 print(message)
+                verified = true
             } catch {
                 print("system fail: \(error)")
             }
         }
-        verified = true
     }
     
     @ViewBuilder

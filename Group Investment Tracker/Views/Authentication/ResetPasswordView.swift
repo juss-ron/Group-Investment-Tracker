@@ -65,8 +65,12 @@ struct ResetPasswordView: View {
                     Group {
                         if showPasswordConfirmation {
                             TextField("Confirm Password", text: $passwordConfirmation)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled(true)
                         } else {
                             SecureField("Confirm Password", text: $passwordConfirmation)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled(true)
                         }
                     }
                     .textContentType(.password)

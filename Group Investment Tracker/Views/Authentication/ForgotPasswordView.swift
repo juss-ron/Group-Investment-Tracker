@@ -28,6 +28,8 @@ struct ForgotPasswordView: View {
                     }
                 
                 TextField("Email", text: $email)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled(true)
                     .font(Font.body.bold())
                     .padding()
             }
