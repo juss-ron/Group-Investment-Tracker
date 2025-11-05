@@ -11,12 +11,16 @@ struct MemberView: View {
     @State private var createViewIsPresented: Bool = false
     @Binding var member: Member
     @Environment(\.dismiss) var dismiss
+    var club = Club(title: "")
+    let service = MemberService()
+    let onBack: () -> Void
     
     var body: some View {
         ZStack {
             VStack {
                 HStack(spacing: 10) {
                     Button {
+                        onBack()
                         dismiss()
                     } label: {
                         ZStack {
@@ -40,7 +44,7 @@ struct MemberView: View {
                         .padding(.leading, 5)
                     
                     VStack(alignment: .leading) {
-                        Text(member.name)
+                        Text(member.username)
                             .font(.largeTitle)
                             .fontWeight(.bold)
                         Text(member.email)
@@ -86,7 +90,7 @@ struct MemberView: View {
                             VStack {
                                 Text("Interest")
                                     .padding(.bottom, 2)
-                                Text(member.interestAccrued.description)
+                                Text(member.interestAcrued.description)
                                     .font(Font.title2.bold())
                             }
                             .padding(.vertical, 20)
@@ -102,6 +106,7 @@ struct MemberView: View {
                             Spacer()
                             Text(member.totalInvestment.description)
                                 .font(Font.title2.bold())
+                                .foregroundStyle(.blue)
                                 .padding(10)
                         }
                         .padding(.vertical, 20)
@@ -112,7 +117,7 @@ struct MemberView: View {
                         
                         HStack(spacing: 20) {
                             VStack {
-                                Text("Owed")
+                                Text("Owing")
                                     .padding(.bottom, 2)
                                 Text(member.owing.description)
                                     .font(Font.title2.bold())
@@ -122,7 +127,7 @@ struct MemberView: View {
                             .frame(maxWidth: .infinity)
                             .overlay(RoundedRectangle(cornerRadius: 10).stroke(.accent, lineWidth: 1))
                             VStack {
-                                Text("In-Hand")
+                                Text("Interest")
                                     .padding(.bottom, 2)
                                 Text(member.interestOwing.description)
                                     .font(Font.title2.bold())
@@ -139,6 +144,7 @@ struct MemberView: View {
                                 .padding(10)
                             Spacer()
                             Text(member.totalOwing.description)
+                                .foregroundStyle(.red)
                                 .font(Font.title2.bold())
                                 .padding(10)
                         }
@@ -177,11 +183,21 @@ struct MemberView: View {
             if createViewIsPresented {
                 ZStack {
                     Color.clear
-                    TransactionView(isPresented: $createViewIsPresented, member: $member)
+                    TransactionView(isPresented: $createViewIsPresented, member: member, club: club)
                         .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.accent, lineWidth: 2))
                         .padding()
                 }
                 .background(.ultraThinMaterial)
+                .onDisappear {
+                    Task {
+                        do {
+                            member = try await service.fetch(member: member, from: club)
+                            print("fetched member")
+                        } catch {
+                            print("failed to fetch member: \(error)")
+                        }
+                    }
+                }
             }
         }
         .navigationBarBackButtonHidden()
@@ -189,5 +205,5 @@ struct MemberView: View {
 }
 
 #Preview {
-    MemberView(member: .constant(Member(name: "Ron", email: "ron@example.com")))
+    MemberView(member: .constant(Member(username: "Ron", email: "ron@example.com"))) {}
 }

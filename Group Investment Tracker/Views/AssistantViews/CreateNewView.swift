@@ -9,10 +9,10 @@ import SwiftUI
 
 struct CreateNewView: View {
     var itemToCreate: ItemToCreate
-    @State private var name: String = ""
-    @State private var email: String = ""
-    @Binding var clubs: [Club]?
-    @Binding var members: [Member]?
+    let clubService = ClubService()
+    let memberService = MemberService()
+    @State private var member: Member = Member(username: "", email: "")
+    @State var club: Club = Club(title: "")
     @Binding var isPresented: Bool
     
     
@@ -24,19 +24,23 @@ struct CreateNewView: View {
             VStack {
                 HStack {
                     Text("Name: ")
-                    TextField("", text: $name)
-                        .textFieldStyle(.roundedBorder)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 7)
+                            .frame(height: 50)
+                            .foregroundColor(Color(.systemGray6))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color("AccentColor"), lineWidth: 1)
+                            }
+                        
+                        TextField("", text: itemToCreate == .club ? $club.title : $member.username)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled(true)
+                            .font(Font.body.bold())
+                            .padding(.horizontal, 5)
+                    }
                 }
                 .padding(.horizontal, 20)
-                
-                if itemToCreate == .member {
-                    HStack {
-                        Text("Email: ")
-                        TextField("", text: $email)
-                            .textFieldStyle(.roundedBorder)
-                    }
-                    .padding(.horizontal, 20)
-                }
             }
             .padding(.bottom, 20)
             
@@ -82,14 +86,28 @@ extension CreateNewView {
     }
     
     func createNewItem() {
-        guard !name.isEmpty else { return }
+        guard !member.username.isEmpty || !club.title.isEmpty else { return }
         if itemToCreate == .club {
-            clubs!.append(Club(name: name))
+            Task {
+                do {
+                    let response = try await clubService.create(club)
+                    print(response.message)
+                    isPresented.toggle()
+                } catch {
+                    print("Failed to create club: \(error)")
+                }
+            }
         } else {
-            guard verifyEmail(email) else { return }
-            members!.append(Member(name: name, email: email))
+            Task {
+                do {
+                    let response = try await memberService.add(member, to: club)
+                    print(response.message)
+                    isPresented.toggle()
+                } catch {
+                    print("Failed to create member: \(error)")
+                }
+            }
         }
-        isPresented.toggle()
     }
     
     func verifyEmail(_ email: String) -> Bool {
@@ -101,5 +119,5 @@ extension CreateNewView {
 }
 
 #Preview {
-    CreateNewView(itemToCreate: .member,clubs: .constant(nil), members: .constant([]), isPresented: .constant(true))
+    CreateNewView(itemToCreate: .member, isPresented: .constant(true))
 }

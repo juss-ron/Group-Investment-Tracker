@@ -29,6 +29,8 @@ struct VerifyEmailView: View {
                     }
                 
                 TextField("4-Digit Code", text: $code)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled(true)
                     .font(Font.body.bold())
                     .padding()
             }

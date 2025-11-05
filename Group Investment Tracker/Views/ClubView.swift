@@ -11,6 +11,9 @@ struct ClubView: View {
     @Binding var club: Club
     @State private var createViewIsPresented: Bool = false
     @Environment(\.dismiss) var dismiss
+    @State private var showDeleteAlert: Bool = false
+    let service = ClubService()
+    let memberService = MemberService()
     
     var body: some View {
         NavigationStack {
@@ -41,10 +44,10 @@ struct ClubView: View {
                             .padding(.leading, 5)
                         
                         VStack(alignment: .leading) {
-                            Text(club.name)
+                            Text(club.title)
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
-                            Text(club.members.count.description + " Members")
+                            Text(club.members.count.description + (club.members.count > 1 ? " Members" : " Member"))
                                 .font(.caption)
                         }
                         
@@ -56,6 +59,15 @@ struct ClubView: View {
                             Image(systemName: "message")
                                 .resizable()
                                 .frame(width: 30, height: 25)
+                        }
+                        
+                        Button {
+                            showDeleteAlert.toggle()
+                        } label: {
+                            Image(systemName: "trash")
+                                .resizable()
+                                .frame(width:25, height: 25)
+                                .foregroundStyle(.red)
                         }
                     }
                     .padding()
@@ -142,10 +154,20 @@ struct ClubView: View {
                             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                                 ForEach($club.members) { $member in
                                     NavigationLink {
-                                        MemberView(member: $member)
+                                        MemberView(member: $member, club: club) {
+                                            Task {
+                                                do {
+                                                    try await Task.sleep(for: .seconds(1.5))
+                                                    club.members = try await memberService.fetchMembers(in: club)
+                                                    print("refreshed members")
+                                                } catch {
+                                                    print("failed to refresh members: \(error)")
+                                                }
+                                            }
+                                        }
                                     } label: {
                                         VStack(alignment: .leading) {
-                                            Text(member.name)
+                                            Text(member.username)
                                                 .font(Font.title2.bold())
                                                 .padding(.bottom, 5)
                                             
@@ -153,7 +175,7 @@ struct ClubView: View {
                                                 HStack {
                                                     Text("Interest")
                                                     Spacer()
-                                                    Text(member.interestAccrued.description)
+                                                    Text(member.interestAcrued.description)
                                                 }
                                                 HStack {
                                                     Text("Owing")
@@ -179,14 +201,40 @@ struct ClubView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .padding()
                     }
+                    .alert("Delete Club", isPresented: $showDeleteAlert) {
+                        Button("Delete", role: .destructive) {
+                            Task {
+                                do {
+                                    let response = try await service.delete(club)
+                                    print(response.message)
+                                    dismiss()
+                                } catch {
+                                    print("Cannot delete club: \(error)")
+                                }
+                            }
+                        }
+                        Button("Cancel", role: .cancel) {   }
+                    } message: {
+                        Text("Are you sure you want to delete this club?")
+                        Text("This action cannot be undone.")
+                    }
                 }
-                
                 
                 newMemberButton
                 
                 
                 if createViewIsPresented {
                     addMemberView
+                        .onDisappear {
+                            Task {
+                                do {
+                                    club.members = try await memberService.fetchMembers(in: club)
+                                    print("Successfully fetched members")
+                                } catch {
+                                    print("Faliled to get members: \(error)")
+                                }
+                            }
+                        }
                 }
             }
         }
@@ -217,7 +265,7 @@ extension ClubView {
     var addMemberView: some View {
         ZStack {
             Color.clear
-            CreateNewView(itemToCreate: .member, clubs: .constant(nil), members: $club.members.optional(), isPresented: $createViewIsPresented)
+            CreateNewView(itemToCreate: .member, club: club, isPresented: $createViewIsPresented)
                 .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.accentColor, lineWidth: 2))
                 .padding()
         }
@@ -226,8 +274,8 @@ extension ClubView {
 }
 
 #Preview {
-    ClubView(club: .constant(Club(name: "Res", members: [
-        Member(name: "John", email: "john@gmail.com"),
-        Member(name: "Emily", email: "emily@apple.com")
+    ClubView(club: .constant(Club(title: "Res", members: [
+        Member(username: "John", email: "john@gmail.com"),
+        Member(username: "Emily", email: "emily@apple.com")
     ])))
 }

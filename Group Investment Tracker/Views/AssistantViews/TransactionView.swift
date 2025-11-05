@@ -9,37 +9,36 @@ import SwiftUI
 
 struct TransactionView: View {
     @Binding var isPresented: Bool
-    @Binding var member: Member
-    @State private var investment: Int?
-    @State private var interest: Int?
-    @State private var debt: Int?
-    @State private var loan: Int?
+    var member: Member = Member(username: "", email: "")
+    @State private var transaction: Transaction = Transaction()
+    let service = MemberService()
+    var club: Club = Club(title: "")
     
     var body: some View{
         VStack(spacing: 20) {
-            Text(member.name)
+            Text(member.username)
                 .font(Font.largeTitle)
             HStack {
                 Text("Pay Investment: ")
-                TextField("0", value: $investment, formatter: NumberFormatter())
+                TextField("0", value: $transaction.investAmount, formatter: NumberFormatter())
                     .textFieldStyle(.roundedBorder)
                     .keyboardType(.numberPad)
             }
             HStack {
                 Text("Pay Interest:       ")
-                TextField("0", value: $interest, formatter: NumberFormatter())
+                TextField("0", value: $transaction.interestAmount, formatter: NumberFormatter())
                     .textFieldStyle(.roundedBorder)
                     .keyboardType(.numberPad)
             }
             HStack {
                 Text("Pay Debt:           ")
-                TextField("0", value: $debt, formatter: NumberFormatter())
+                TextField("0", value: $transaction.payLoanAmount, formatter: NumberFormatter())
                     .textFieldStyle(.roundedBorder)
                     .keyboardType(.numberPad)
             }
             HStack {
                 Text("Take Loan:         ")
-                TextField("0", value: $loan, formatter: NumberFormatter())
+                TextField("0", value: $transaction.loanAmount, formatter: NumberFormatter())
                     .textFieldStyle(.roundedBorder)
                     .keyboardType(.numberPad)
             }
@@ -76,16 +75,20 @@ extension TransactionView {
     }
     
     func newTransaction() {
-        member.payInvestment(investment ?? 0)
-        member.payInterest(interest ?? 0)
-        member.reduceLoan(by: debt ?? 0)
-        member.loan(loan ?? 0)
-        isPresented.toggle()
+        Task {
+            do {
+                let response = try await service.make(transaction, for: member, in: club)
+                print(response)
+                isPresented.toggle()
+            } catch {
+                print("Failed to create transaction: \(error)")
+            }
+        }
     }
 }
 
 #Preview {
-    TransactionView(isPresented: .constant(true), member: .constant(Member(name: "Jack Sparrow", email: "sparrow@gmail.com")))
+    TransactionView(isPresented: .constant(true))
 }
 
 

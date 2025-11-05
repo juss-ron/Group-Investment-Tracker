@@ -11,6 +11,8 @@ struct SignInView: View {
     @State private var user = User(username: "", email: "", password: "")
     @State private var showPassword: Bool = false
     @State private var verified: Bool = false
+    @AppStorage("token") var token = ""
+    let service = AuthService()
     
     var body: some View {
         VStack(spacing: 20) {
@@ -25,7 +27,9 @@ struct SignInView: View {
                             .stroke(Color("AccentColor"), lineWidth: 1)
                     }
                 
-                TextField("Email", text: $user.email)
+                TextField("Username", text: $user.username)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled(true)
                     .font(Font.body.bold())
                     .padding()
             }
@@ -43,10 +47,14 @@ struct SignInView: View {
                     HStack {
                         if showPassword {
                             TextField("Password", text: $user.password)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled(true)
                                 .textContentType(.password)
                                 .font(Font.body.bold())
                         } else {
                             SecureField("Password", text: $user.password)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled(true)
                                 .textContentType(.password)
                                 .font(Font.body.bold())
                         }
@@ -60,9 +68,11 @@ struct SignInView: View {
                     }
                     .padding()
                 }
+                validatePassword()
                 NavigationLink("Forgot Password?") {
                     ForgotPasswordView()
                 }
+                .disabled(true)
             }
             
             Button {
@@ -71,10 +81,12 @@ struct SignInView: View {
                 RoundedRectangle(cornerRadius: 20)
                     .frame(width: 150, height: 50)
                     .foregroundColor(Color("AccentColor"))
+                    .opacity(conditionsMet() ? 1 : 0.2)
                     .overlay(Text("Sign In").foregroundColor(.white))
             }
             .padding(20)
             .padding(.horizontal, 10)
+            .disabled(!conditionsMet())
             
             HStack {
                 Text("Don't have an account?")
@@ -96,7 +108,45 @@ struct SignInView: View {
 
 extension SignInView {
     func verifyUser() {
-        verified = true
+        Task {
+            do {
+                let response = try await service.verifyUser(user)
+                let message = response.message
+                token = response.token ?? "No token"
+                print(token)
+                print(message)
+                verified = true
+            } catch {
+                print("system fail: \(error)")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func validatePassword() -> some View {
+        if user.password.count != 0 {
+            if user.password.count < 8 {
+                HStack {
+                    Text("Password should be more than 8 charecters long")
+                        .font(.footnote)
+                        .foregroundStyle(.red)
+                    
+                    Spacer()
+                }
+            } else if !Validator.isPasswordValid(user.password) {
+                HStack {
+                    Text("Password must include letters, numbers, and special characters")
+                        .font(.footnote)
+                        .foregroundStyle(.red)
+                    
+                    Spacer()
+                }
+            }
+        }
+    }
+    
+    func conditionsMet() -> Bool {
+        return Validator.isPasswordValid(user.password)// && user.username.count > 3
     }
 }
 
