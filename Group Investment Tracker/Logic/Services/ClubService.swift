@@ -21,7 +21,13 @@ class ClubService {
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
-        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+
+        if !(200...299).contains(httpResponse.statusCode) {
+            let body = String(data: data, encoding: .utf8) ?? "No response body"
+            print("❌ Fetch failed — status: \(httpResponse.statusCode), body: \(body)")
             throw URLError(.badServerResponse)
         }
         
@@ -38,7 +44,13 @@ class ClubService {
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
-        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+
+        if !(200...299).contains(httpResponse.statusCode) {
+            let body = String(data: data, encoding: .utf8) ?? "No response body"
+            print("❌ Creation failed — status: \(httpResponse.statusCode), body: \(body)")
             throw URLError(.badServerResponse)
         }
         
@@ -56,7 +68,13 @@ class ClubService {
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
-        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+
+        if !(200...299).contains(httpResponse.statusCode) {
+            let body = String(data: data, encoding: .utf8) ?? "No response body"
+            print("❌ Update failed — status: \(httpResponse.statusCode), body: \(body)")
             throw URLError(.badServerResponse)
         }
         

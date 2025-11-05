@@ -22,14 +22,20 @@ class MemberService {
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
-        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+
+        if !(200...299).contains(httpResponse.statusCode) {
+            let body = String(data: data, encoding: .utf8) ?? "No response body"
+            print("❌ Fetch failed — status: \(httpResponse.statusCode), body: \(body)")
             throw URLError(.badServerResponse)
         }
         
         return try JSONDecoder().decode([Member].self, from: data)
     }
     
-    // Create a new club
+    // Create a new member
     func add(_ member: Member, to club: Club) async throws -> Response {
         var request = URLRequest(url: baseURL)
         request.httpMethod = "POST"
@@ -40,7 +46,13 @@ class MemberService {
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
-        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+
+        if !(200...299).contains(httpResponse.statusCode) {
+            let body = String(data: data, encoding: .utf8) ?? "No response body"
+            print("❌ Creation failed — status: \(httpResponse.statusCode), body: \(body)")
             throw URLError(.badServerResponse)
         }
         
@@ -48,18 +60,24 @@ class MemberService {
     }
     
     // Update a member
-    func update(_ member: Member, in club: Club) async throws -> Response {
+    func make(_ transaction: Transaction, for member: Member, in club: Club) async throws -> Response {
         let url = baseURL.appendingPathComponent(member.id)
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue(club.id, forHTTPHeaderField: "ClubId")
-        request.httpBody = try JSONEncoder().encode(member)
+        request.httpBody = try JSONEncoder().encode(transaction)
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
-        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+
+        if !(200...299).contains(httpResponse.statusCode) {
+            let body = String(data: data, encoding: .utf8) ?? "No response body"
+            print("❌ Update failed — status: \(httpResponse.statusCode), body: \(body)")
             throw URLError(.badServerResponse)
         }
         
