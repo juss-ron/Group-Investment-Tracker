@@ -143,7 +143,7 @@ extension ClubsView {
         ZStack {
             Color.clear
             
-            CreateNewView(itemToCreate: .club, clubs: $clubs.optional(), members: .constant(nil), isPresented: $createViewIsPresented)
+            CreateNewView(itemToCreate: .club, isPresented: $createViewIsPresented)
                 .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.accentColor, lineWidth: 2))
                 .padding()
         }
