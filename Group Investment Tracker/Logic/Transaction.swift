@@ -7,8 +7,8 @@
 
 struct Transaction: Codable, Identifiable {
     var id: String = ""
-    var investAmount: String = ""
-    var interestAmount: String = ""
-    var payLoanAmount: String = ""
-    var loanAmount: String = ""
+    var investAmount: Int?
+    var interestAmount: Int?
+    var payLoanAmount: Int?
+    var loanAmount: Int?
 }
