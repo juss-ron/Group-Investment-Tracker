@@ -7,6 +7,7 @@
 
 import Foundation
 
+// Group of members investing
 struct Club: Codable, Identifiable {
     var id: String = ""
     var title: String

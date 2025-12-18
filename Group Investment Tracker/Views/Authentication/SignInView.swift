@@ -68,7 +68,9 @@ struct SignInView: View {
                     }
                     .padding()
                 }
-                validatePassword()
+                
+                validatePasswordView()
+                
                 NavigationLink("Forgot Password?") {
                     ForgotPasswordView()
                 }
@@ -106,6 +108,7 @@ struct SignInView: View {
     }
 }
 
+//Logic
 extension SignInView {
     func verifyUser() {
         Task {
@@ -122,8 +125,12 @@ extension SignInView {
         }
     }
     
+    func conditionsMet() -> Bool {
+        return Validator.isPasswordValid(user.password)
+    }
+    
     @ViewBuilder
-    func validatePassword() -> some View {
+    func validatePasswordView() -> some View {
         if user.password.count != 0 {
             if user.password.count < 8 {
                 HStack {
@@ -143,10 +150,6 @@ extension SignInView {
                 }
             }
         }
-    }
-    
-    func conditionsMet() -> Bool {
-        return Validator.isPasswordValid(user.password)// && user.username.count > 3
     }
 }
 

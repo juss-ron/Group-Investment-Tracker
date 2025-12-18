@@ -33,6 +33,7 @@ struct SignUpView: View {
                     .font(Font.body.bold())
                     .padding()
             }
+            
             validateUsername()
             
             ZStack {
@@ -51,6 +52,7 @@ struct SignUpView: View {
                     .font(Font.body.bold())
                     .padding()
             }
+            
             validateEmail()
             
             ZStack {
@@ -86,6 +88,7 @@ struct SignUpView: View {
                 }
                 .padding()
             }
+            
             validatePassword()
             
             HStack {
@@ -133,20 +136,8 @@ extension SignUpView {
         }
     }
     
-    @ViewBuilder
-    func validateUsername() -> some View {
-        if user.username.count != 0 {
-            if user.username.count < 4 || user.username.count > 15 {
-                HStack {
-                    Text("Username should be between 4 and 15 characters")
-                        .font(.footnote)
-                        .foregroundStyle(.red)
-                        .padding(.top, -15)
-                    
-                    Spacer()
-                }
-            }
-        }
+    func conditionsMet() -> Bool {
+        return Validator.isEmailValid(user.email) && Validator.isPasswordValid(user.password) && user.username.count > 3 && user.username.count < 16
     }
     
     @ViewBuilder
@@ -159,6 +150,22 @@ extension SignUpView {
                     .padding(.top, -15)
                 
                 Spacer()
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func validateUsername() -> some View {
+        if user.username.count != 0 {
+            if user.username.count < 4 || user.username.count > 15 {
+                HStack {
+                    Text("Username should be between 4 and 15 characters")
+                        .font(.footnote)
+                        .foregroundStyle(.red)
+                        .padding(.top, -15)
+                    
+                    Spacer()
+                }
             }
         }
     }
@@ -187,12 +194,6 @@ extension SignUpView {
             }
         }
     }
-    
-    func conditionsMet() -> Bool {
-        return Validator.isEmailValid(user.email) && Validator.isPasswordValid(user.password) && user.username.count > 3 && user.username.count < 16
-    }
-    
-    
 }
 
 #Preview {

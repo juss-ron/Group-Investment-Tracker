@@ -35,6 +35,7 @@ class AuthService {
         return result
     }
     
+    // Verify that a user exists
     func verifyUser(_ user: User) async throws -> Response {
         let url = baseURL.appendingPathComponent("login")
         var request = URLRequest(url: url)

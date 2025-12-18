@@ -5,6 +5,7 @@
 //  Created by Ron Harifiyati on 5/11/2025.
 //
 
+// Handles modificatiions to a member's investments
 struct Transaction: Codable, Identifiable {
     var id: String = ""
     var investAmount: Int?

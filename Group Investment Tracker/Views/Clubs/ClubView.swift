@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ClubView: View {
-    @Binding var club: Club
+    @State var club: Club
     @State private var createViewIsPresented: Bool = false
     @Environment(\.dismiss) var dismiss
     @State private var showDeleteAlert: Bool = false
@@ -203,15 +203,7 @@ struct ClubView: View {
                     }
                     .alert("Delete Club", isPresented: $showDeleteAlert) {
                         Button("Delete", role: .destructive) {
-                            Task {
-                                do {
-                                    let response = try await service.delete(club)
-                                    print(response.message)
-                                    dismiss()
-                                } catch {
-                                    print("Cannot delete club: \(error)")
-                                }
-                            }
+                            deleteMember()
                         }
                         Button("Cancel", role: .cancel) {   }
                     } message: {
@@ -220,22 +212,18 @@ struct ClubView: View {
                     }
                 }
                 
-                newMemberButton
+                newMemberButtonView()
                 
                 
                 if createViewIsPresented {
                     addMemberView
                         .onDisappear {
-                            Task {
-                                do {
-                                    club.members = try await memberService.fetchMembers(in: club)
-                                    print("Successfully fetched members")
-                                } catch {
-                                    print("Faliled to get members: \(error)")
-                                }
-                            }
+                            getMembers()
                         }
                 }
+            }
+            .onAppear() {
+                getMembers()
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -244,7 +232,32 @@ struct ClubView: View {
 
 //Assistant views
 extension ClubView {
-    var newMemberButton: some View {
+    
+    func getMembers() {
+        Task {
+            do {
+                club.members = try await memberService.fetchMembers(in: club)
+                print("Successfully fetched members")
+            } catch {
+                print("Faliled to get members: \(error)")
+            }
+        }
+    }
+    
+    func deleteMember() {
+        Task {
+            do {
+                let response = try await service.delete(club)
+                print(response.message)
+                dismiss()
+            } catch {
+                print("Cannot delete club: \(error)")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func newMemberButtonView() -> some View {
         VStack() {
             Spacer()
             HStack {
@@ -274,8 +287,8 @@ extension ClubView {
 }
 
 #Preview {
-    ClubView(club: .constant(Club(title: "Res", members: [
+    ClubView(club: Club(title: "MCRI", members: [
         Member(username: "John", email: "john@gmail.com"),
         Member(username: "Emily", email: "emily@apple.com")
-    ])))
+    ]))
 }

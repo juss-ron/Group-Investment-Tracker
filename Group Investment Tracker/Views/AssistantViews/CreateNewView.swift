@@ -56,7 +56,12 @@ struct CreateNewView: View {
                 }
                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.accentColor, lineWidth: 2))
                 Button {
-                    createNewItem()
+                    guard !member.username.isEmpty || !club.title.isEmpty else { return }
+                    if itemToCreate == .club {
+                        createNewClub()
+                    } else {
+                        createNewMember()
+                    }
                 } label: {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10).foregroundStyle(.clear)
@@ -72,40 +77,32 @@ struct CreateNewView: View {
     }
 }
 
-
-
-
-enum ItemToCreate {
-    case club, member
-}
-
 //Logic
 extension CreateNewView {
     func cancel() {
         isPresented.toggle()
     }
     
-    func createNewItem() {
-        guard !member.username.isEmpty || !club.title.isEmpty else { return }
-        if itemToCreate == .club {
-            Task {
-                do {
-                    let response = try await clubService.create(club)
-                    print(response.message)
-                    isPresented.toggle()
-                } catch {
-                    print("Failed to create club: \(error)")
-                }
+    func createNewClub() {
+        Task {
+            do {
+                let response = try await clubService.create(club)
+                print(response.message)
+                isPresented.toggle()
+            } catch {
+                print("Failed to create club: \(error)")
             }
-        } else {
-            Task {
-                do {
-                    let response = try await memberService.add(member, to: club)
-                    print(response.message)
-                    isPresented.toggle()
-                } catch {
-                    print("Failed to create member: \(error)")
-                }
+        }
+    }
+    
+    func createNewMember() {
+        Task {
+            do {
+                let response = try await memberService.add(member, to: club)
+                print(response.message)
+                isPresented.toggle()
+            } catch {
+                print("Failed to create member: \(error)")
             }
         }
     }
@@ -116,6 +113,10 @@ extension CreateNewView {
         }
         return false
     }
+}
+
+enum ItemToCreate {
+    case club, member
 }
 
 #Preview {

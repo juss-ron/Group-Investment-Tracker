@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ClubsView: View {
-    @State private var clubs: [Club] = []
+    @State var clubs: [Club] = []
     @State private var createViewIsPresented: Bool = false
     let service = ClubService()
     
@@ -48,9 +48,9 @@ struct ClubsView: View {
                     .background(Color(.systemGray6))
                     
                     ScrollView {
-                        ForEach($clubs) { $club in
+                        ForEach(clubs) { club in
                             NavigationLink {
-                                ClubView(club: $club)
+                                ClubView(club: club)
                             } label: {
                                 HStack {
                                     Image("GroupProfilePic")
@@ -78,14 +78,7 @@ struct ClubsView: View {
                     }
                 }
                 .onAppear {
-                    Task {
-                        do {
-                            clubs = try await service.fetchClubs()
-                            print("Retrieved clubs")
-                        } catch {
-                            print("Failed to get clubs: \(error)")
-                        }
-                    }
+                    getClubs()
                 }
                 
                 
@@ -95,19 +88,12 @@ struct ClubsView: View {
                         .multilineTextAlignment(.center)
                 }
                 
-                addbuttonView
+                addbuttonView()
                 
                 if createViewIsPresented {
-                    createNewClub
+                    createNewClub()
                         .onDisappear() {
-                            Task {
-                                do {
-                                    clubs = try await service.fetchClubs()
-                                    print("Retrieved clubs")
-                                } catch {
-                                    print("Failed to get clubs: \(error)")
-                                }
-                            }
+                            getClubs()
                         }
                 }
             }
@@ -119,7 +105,20 @@ struct ClubsView: View {
 
 //Assistant Views
 extension ClubsView {
-    var addbuttonView: some View {
+    
+    func getClubs() {
+        Task {
+            do {
+                clubs = try await service.fetchClubs()
+                print("Retrieved clubs")
+            } catch {
+                print("Failed to get clubs: \(error)")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func addbuttonView() -> some View {
         VStack() {
             Spacer()
             
@@ -139,7 +138,8 @@ extension ClubsView {
         }
     }
     
-    var createNewClub: some View {
+    @ViewBuilder
+    func createNewClub() -> some View {
         ZStack {
             Color.clear
             
@@ -152,7 +152,7 @@ extension ClubsView {
 }
 
 #Preview {
-    ClubsView()
+    ClubsView(clubs: [Club(title: "MCRI", members: [Member(username: "John", email: "john@gmail.com"), Member(username: "Jane", email: "jane@gmail.com"), Member(username: "Steve", email: "steve@gmail.com")])])
 }
 
 

@@ -7,6 +7,7 @@
 
 import Foundation
 
+// Handles authentication
 struct User: Codable {
     var id: UUID = UUID()
     var username: String

@@ -189,18 +189,24 @@ struct MemberView: View {
                 }
                 .background(.ultraThinMaterial)
                 .onDisappear {
-                    Task {
-                        do {
-                            member = try await service.fetch(member: member, from: club)
-                            print("fetched member")
-                        } catch {
-                            print("failed to fetch member: \(error)")
-                        }
-                    }
+                    fetchMember()
                 }
             }
         }
         .navigationBarBackButtonHidden()
+    }
+}
+
+extension MemberView {
+    func fetchMember() {
+        Task {
+            do {
+                member = try await service.fetch(member: member, from: club)
+                print("fetched member")
+            } catch {
+                print("failed to fetch member: \(error)")
+            }
+        }
     }
 }
 

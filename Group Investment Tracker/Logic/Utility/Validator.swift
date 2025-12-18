@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+// Checks if email is valid and if password meets standards
 struct Validator {
     static func isPasswordValid(_ password: String) -> Bool {
         // At least one letter, one number, one special character, and 8+ characters long

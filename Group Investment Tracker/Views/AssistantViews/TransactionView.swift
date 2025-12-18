@@ -68,7 +68,7 @@ struct TransactionView: View {
     }
 }
 
-
+//Logic
 extension TransactionView {
     func cancel() {
         isPresented.toggle()

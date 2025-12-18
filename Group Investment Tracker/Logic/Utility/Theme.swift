@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// Handles changing of the theme
 enum Theme: String, Identifiable, CaseIterable {
     var id: String { self.rawValue }
     case light = "Light", dark = "Dark", system = "System"

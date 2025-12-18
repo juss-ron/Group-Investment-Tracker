@@ -1,5 +1,5 @@
 //
-//  FirstView.swift
+//  WelcomeView.swift
 //  Group Investment Tracker
 //
 //  Created by Ron Harifiyati on 17/10/2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FirstView: View {
+struct WelcomeView: View {
     @State private var navigate: Bool = false
     @State private var rotationDegrees: Double = 0
     
@@ -51,5 +51,5 @@ struct FirstView: View {
 }
 
 #Preview {
-    FirstView()
+    WelcomeView()
 }
